@@ -43,6 +43,10 @@ public class OrangeScrape {
 
 
     private void initDriver() {
+
+        System.out.println();
+        System.out.println("Opretter Firefox driver..");
+
         driver = new FirefoxDriver();
         selenium = new WebDriverBackedSelenium(driver, "http://www.orange-scene.dk/typo3");
     }
@@ -50,7 +54,10 @@ public class OrangeScrape {
 
     private void login(String user, String passwd) {
 
-        driver.navigate().to("http://www.orange-scene.dk/typo3");
+        String loginLink = "http://www.orange-scene.dk/typo3";
+
+        System.out.println("Går til: " + loginLink);
+        driver.navigate().to(loginLink);
         selenium.waitForPageToLoad("5000");
 
         driver.findElement(new By.ById("username")).sendKeys(user);
@@ -63,10 +70,14 @@ public class OrangeScrape {
         File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
         // Now you can do whatever you need to do with it, for example copy somewhere
         try {
-            FileUtils.copyFile(scrFile, new File("screenshot.png"));
+            System.out.println("Tager screenshot1.png");
+            FileUtils.copyFile(scrFile, new File("screenshot1.png"));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+        driver.quit();
+        System.exit(0);
     }
 
     private void saveOverview(String event) {
