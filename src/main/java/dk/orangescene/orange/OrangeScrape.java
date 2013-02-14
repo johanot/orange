@@ -55,7 +55,7 @@ public class OrangeScrape {
         driver.findElement(new By.ByName("batch_count")).sendKeys("50");
         driver.findElement(new By.ByXPath("//form[@name='activate']")).submit();
 
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
         captureScreenshot();
     }
 
@@ -65,7 +65,7 @@ public class OrangeScrape {
         selenium.selectFrame("relative=top");
 
         driver.findElements(new By.ByLinkText("User Admin")).get(1).click();
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
         captureScreenshot();
     }
 
@@ -74,7 +74,7 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Importer downloaded dump");
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
         driver.findElement(new By.ByXPath("//input[@value='Importer data']")).click();
         selenium.waitForPageToLoad("10000");
         captureScreenshot();
@@ -88,7 +88,7 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Download RFMDB dump");
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
         driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
         selenium.waitForPageToLoad("10000");
         captureScreenshot();
@@ -102,7 +102,7 @@ public class OrangeScrape {
     private void gotoImportAdmin() {
         System.out.println("Going to RFMDB Import-module");
         driver.findElement(new By.ByLinkText("RFMDB Import")).click();
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
     }
 
 
@@ -122,14 +122,14 @@ public class OrangeScrape {
 
         System.out.println("Opening: " + loginLink);
         driver.navigate().to(loginLink);
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
 
         driver.findElement(new By.ById("username")).sendKeys(user);
 
         driver.findElement(new By.ById("password")).sendKeys(passwd);
 
         driver.findElement(new By.ByName("loginform")).submit();
-        selenium.waitForPageToLoad("2000");
+        selenium.waitForPageToLoad("10000");
 
         captureScreenshot();
     }
