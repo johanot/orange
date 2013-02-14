@@ -72,7 +72,7 @@ public class OrangeScrape {
     private void runImport() {
         System.out.println("Importerer RFMDB dump");
 
-        Select s = new Select(driver.findElement(new By.ByName("SET[function]")));
+        Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Importer downloaded dump");
         selenium.waitForPageToLoad("5000");
         driver.findElement(new By.ByXPath("//input[@value='Importer data']")).click();
@@ -86,7 +86,7 @@ public class OrangeScrape {
 
         selenium.selectFrame("content");
 
-        Select s = new Select(driver.findElement(new By.ByName("SET[function]")));
+        Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Download RFMDB dump");
         selenium.waitForPageToLoad("5000");
         driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
