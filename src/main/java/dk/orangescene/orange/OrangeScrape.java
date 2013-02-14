@@ -37,8 +37,6 @@ public class OrangeScrape {
         orangeScrape.login(username, password);
 		//orangeScrape.saveOverview(args[2]);
         //orangeScrape.downloadFile(args[2]);
-
-        System.exit(0);
     }
 
 
@@ -77,7 +75,6 @@ public class OrangeScrape {
         }
 
         driver.quit();
-        System.exit(0);
     }
 
     private void saveOverview(String event) {
