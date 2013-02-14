@@ -2,12 +2,14 @@ package dk.dds.orange;
 
 import com.thoughtworks.selenium.Selenium;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverBackedSelenium;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 
 /**
@@ -23,38 +25,46 @@ public class OrangeScrape {
 
     public static void main(String[] args) {
 
-        if (args.length != 3) {
-            System.err.println("Syntaks: BillettoScrape user password event");
+        if (args.length != 2) {
+            System.err.println("Syntaks: OrangeScrape user password");
             System.exit(1);
         }
 
         OrangeScrape orangeScrape = new OrangeScrape();
         orangeScrape.initDriver();
         orangeScrape.login(args[0], args[1]);
-		orangeScrape.saveOverview(args[2]);
-        orangeScrape.downloadFile(args[2]);
+		//orangeScrape.saveOverview(args[2]);
+        //orangeScrape.downloadFile(args[2]);
 
         System.exit(0);
     }
 
 
     private void initDriver() {
-        driver = new ChromeDriver();
-        selenium = new WebDriverBackedSelenium(driver, "");
+        driver = new FirefoxDriver();
+        selenium = new WebDriverBackedSelenium(driver, "http://www.orange-scene.dk/typo3");
     }
 
 
     private void login(String user, String passwd) {
 
-        driver.navigate().to("http://www.billetto.dk/da/users/sign_in");
+        driver.navigate().to("http://www.orange-scene.dk/typo3");
         selenium.waitForPageToLoad("5000");
 
-        driver.findElement(new By.ById("user_email")).sendKeys(user);
+        driver.findElement(new By.ById("username")).sendKeys(user);
 
-        driver.findElement(new By.ById("user_password")).sendKeys(passwd);
+        driver.findElement(new By.ById("password")).sendKeys(passwd);
 
-        driver.findElement(new By.ById("login_user")).click();
+        driver.findElement(new By.ByName("loginform")).submit();
         selenium.waitForPageToLoad("2000");
+
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        // Now you can do whatever you need to do with it, for example copy somewhere
+        try {
+            FileUtils.copyFile(scrFile, new File("screenshot.png"));
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     private void saveOverview(String event) {
