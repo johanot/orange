@@ -21,6 +21,8 @@ public class OrangeScrape {
     private WebDriver driver;
     private Selenium selenium;
 
+    private int screenshotNumber = 1;
+
 
     public static void main(String[] args) {
 
@@ -35,15 +37,22 @@ public class OrangeScrape {
         OrangeScrape orangeScrape = new OrangeScrape();
         orangeScrape.initDriver();
         orangeScrape.login(username, password);
-		//orangeScrape.saveOverview(args[2]);
-        //orangeScrape.downloadFile(args[2]);
+        orangeScrape.gotoImportAdmin();
+        //orangeScrape.runDownload();
+        //orangeScrape.runImport();
+    }
+
+    private void gotoImportAdmin() {
+        System.out.println("Going to RFMDB Import-module");
+        driver.findElement(new By.ByLinkText("RFMDB Import")).click();
+        captureScreenshot();
     }
 
 
     private void initDriver() {
 
         System.out.println();
-        System.out.println("Opretter Firefox driver..");
+        System.out.println("Creating Firefox driver..");
 
         driver = new FirefoxDriver();
         selenium = new WebDriverBackedSelenium(driver, "http://www.orange-scene.dk/typo3");
@@ -54,7 +63,7 @@ public class OrangeScrape {
 
         String loginLink = "http://www.orange-scene.dk/typo3";
 
-        System.out.println("Går til: " + loginLink);
+        System.out.println("Opening: " + loginLink);
         driver.navigate().to(loginLink);
         selenium.waitForPageToLoad("5000");
 
@@ -65,45 +74,20 @@ public class OrangeScrape {
         driver.findElement(new By.ByName("loginform")).submit();
         selenium.waitForPageToLoad("2000");
 
+        captureScreenshot();
+    }
+
+    private void captureScreenshot() {
         File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        // Now you can do whatever you need to do with it, for example copy somewhere
+
+        String filename = "screenshot" + (++screenshotNumber) + ".png";
+
         try {
-            System.out.println("Tager screenshot1.png");
-            FileUtils.copyFile(scrFile, new File("screenshot1.png"));
+            System.out.println("Capturing " + filename);
+            FileUtils.copyFile(scrFile, new File(filename));
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            System.err.println("Could not capture screenshot #" + screenshotNumber);
         }
-
-        driver.quit();
-    }
-
-    private void saveOverview(String event) {
-
-        String eventOverviewLink = "http://www.billetto.dk/da/events/" + event + "/overview";
-        driver.navigate().to(eventOverviewLink);
-
-        try {
-            PrintStream ps = new PrintStream(event + ".html");
-            ps.print(selenium.getHtmlSource());
-            ps.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void downloadFile(String event) {
-        String eventListDownloadLink = "http://www.billetto.dk/da/events/" + event + "/list.csv?listtype=guestlist";
-        driver.navigate().to(eventListDownloadLink);
-		
-		try
-		{
-			Thread.sleep(10000);
-
-		driver.close();
-        driver.quit();
-
-        } catch (InterruptedException e) {   }
     }
 
 }
