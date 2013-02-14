@@ -1,10 +1,9 @@
-package dk.dds.orange;
+package dk.orangescene.orange;
 
 import com.thoughtworks.selenium.Selenium;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.File;
@@ -25,14 +24,17 @@ public class OrangeScrape {
 
     public static void main(String[] args) {
 
-        if (args.length != 2) {
-            System.err.println("Syntaks: OrangeScrape user password");
+        String username = System.getProperty("orange.username");
+        String password = System.getProperty("orange.password");
+
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+            System.err.println("Required properties: orange.username, orange.password");
             System.exit(1);
         }
 
         OrangeScrape orangeScrape = new OrangeScrape();
         orangeScrape.initDriver();
-        orangeScrape.login(args[0], args[1]);
+        orangeScrape.login(username, password);
 		//orangeScrape.saveOverview(args[2]);
         //orangeScrape.downloadFile(args[2]);
 
