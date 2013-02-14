@@ -8,9 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 
 /**
  * User: jot
@@ -55,8 +53,13 @@ public class OrangeScrape {
         driver.findElement(new By.ByName("batch_count")).sendKeys("50");
         driver.findElement(new By.ByXPath("//form[@name='activate']")).submit();
 
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
+
         captureScreenshot();
+    }
+
+    private void waitForPageLoad() {
+        selenium.waitForPageToLoad("30000");        
     }
 
     private void gotoUserAdmin() {
@@ -65,7 +68,7 @@ public class OrangeScrape {
         selenium.selectFrame("relative=top");
 
         driver.findElements(new By.ByLinkText("User Admin")).get(1).click();
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
         captureScreenshot();
     }
 
@@ -74,9 +77,9 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Importer downloaded dump");
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
         driver.findElement(new By.ByXPath("//input[@value='Importer data']")).click();
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
         captureScreenshot();
     }
 
@@ -88,9 +91,9 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Download RFMDB dump");
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
         driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
         captureScreenshot();
     }
 
@@ -102,7 +105,7 @@ public class OrangeScrape {
     private void gotoImportAdmin() {
         System.out.println("Going to RFMDB Import-module");
         driver.findElement(new By.ByLinkText("RFMDB Import")).click();
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
     }
 
 
@@ -122,14 +125,14 @@ public class OrangeScrape {
 
         System.out.println("Opening: " + loginLink);
         driver.navigate().to(loginLink);
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
 
         driver.findElement(new By.ById("username")).sendKeys(user);
 
         driver.findElement(new By.ById("password")).sendKeys(passwd);
 
         driver.findElement(new By.ByName("loginform")).submit();
-        selenium.waitForPageToLoad("10000");
+        waitForPageLoad();
 
         captureScreenshot();
     }
