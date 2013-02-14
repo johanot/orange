@@ -72,8 +72,6 @@ public class OrangeScrape {
     private void runImport() {
         System.out.println("Importerer RFMDB dump");
 
-        selenium.selectFrame("content");
-
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Importer downloaded dump");
         selenium.waitForPageToLoad("5000");
@@ -92,7 +90,7 @@ public class OrangeScrape {
         s.selectByVisibleText("Download RFMDB dump");
         selenium.waitForPageToLoad("5000");
         driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
-        selenium.waitForPageToLoad("5000");
+        selenium.waitForPageToLoad("10000");
         captureScreenshot();
     }
 
