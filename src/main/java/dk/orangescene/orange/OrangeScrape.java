@@ -5,6 +5,7 @@ import com.thoughtworks.selenium.Selenium;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,14 +39,70 @@ public class OrangeScrape {
         orangeScrape.initDriver();
         orangeScrape.login(username, password);
         orangeScrape.gotoImportAdmin();
-        //orangeScrape.runDownload();
-        //orangeScrape.runImport();
+        orangeScrape.runDownload();
+        orangeScrape.runImport();
+        orangeScrape.gotoUserAdmin();
+        orangeScrape.sendEmails();
+
+        orangeScrape.tearDownDriver();
+    }
+
+    private void sendEmails() {
+        System.out.println("Trying to send 50 batch e-mails");
+
+        selenium.selectFrame("content");
+
+        driver.findElement(new By.ByName("batch_count")).sendKeys("50");
+        driver.findElement(new By.ByXPath("//form[@name='activate']")).submit();
+
+        selenium.waitForPageToLoad("5000");
+        captureScreenshot();
+    }
+
+    private void gotoUserAdmin() {
+        System.out.println("Going to UserAdmin-module");
+
+        selenium.selectFrame("relative=top");
+
+        driver.findElements(new By.ByLinkText("User Admin")).get(1).click();
+        selenium.waitForPageToLoad("5000");
+        captureScreenshot();
+    }
+
+    private void runImport() {
+        System.out.println("Importerer RFMDB dump");
+
+        Select s = new Select(driver.findElement(new By.ByName("SET[function]")));
+        s.selectByVisibleText("Importer downloaded dump");
+        selenium.waitForPageToLoad("5000");
+        driver.findElement(new By.ByXPath("//input[@value='Importer data']")).click();
+        selenium.waitForPageToLoad("10000");
+        captureScreenshot();
+    }
+
+    private void runDownload() {
+
+        System.out.println("Downloader RFMDB dump");
+
+        selenium.selectFrame("content");
+
+        Select s = new Select(driver.findElement(new By.ByName("SET[function]")));
+        s.selectByVisibleText("Download RFMDB dump");
+        selenium.waitForPageToLoad("5000");
+        driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
+        selenium.waitForPageToLoad("5000");
+        captureScreenshot();
+    }
+
+    private void tearDownDriver() {
+        System.out.println("Exitting..");
+        driver.quit();
     }
 
     private void gotoImportAdmin() {
         System.out.println("Going to RFMDB Import-module");
         driver.findElement(new By.ByLinkText("RFMDB Import")).click();
-        captureScreenshot();
+        selenium.waitForPageToLoad("5000");
     }
 
 
