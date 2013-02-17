@@ -59,7 +59,7 @@ public class OrangeScrape {
     }
 
     private void waitForPageLoad() {
-        selenium.waitForPageToLoad("30000");        
+        selenium.waitForPageToLoad("60000");
     }
 
     private void gotoUserAdmin() {
