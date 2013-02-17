@@ -1,14 +1,18 @@
 package dk.orangescene.orange;
 
+import com.google.common.base.Function;
 import com.thoughtworks.selenium.Selenium;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: jot
@@ -53,13 +57,22 @@ public class OrangeScrape {
         driver.findElement(new By.ByName("batch_count")).sendKeys("50");
         driver.findElement(new By.ByXPath("//form[@name='activate']")).submit();
 
-        waitForPageLoad();
+        selenium.waitForFrameToLoad("content", "30000");
 
         captureScreenshot();
     }
 
-    private void waitForPageLoad() {
-        selenium.waitForPageToLoad("60000");
+    private WebElement waitForElementFound(final By by) {
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(30, TimeUnit.SECONDS)
+                .pollingEvery(5, TimeUnit.SECONDS)
+                .ignoring(NoSuchElementException.class);
+
+       return wait.until(new Function<WebDriver, WebElement>() {
+            public WebElement apply(WebDriver driver) {
+                return driver.findElement(by);
+            }
+        });
     }
 
     private void gotoUserAdmin() {
@@ -68,7 +81,9 @@ public class OrangeScrape {
         selenium.selectFrame("relative=top");
 
         driver.findElements(new By.ByLinkText("User Admin")).get(1).click();
-        waitForPageLoad();
+
+        selenium.waitForFrameToLoad("content", "30000");
+
         captureScreenshot();
     }
 
@@ -77,9 +92,11 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Importer downloaded dump");
-        waitForPageLoad();
+
         driver.findElement(new By.ByXPath("//input[@value='Importer data']")).click();
-        waitForPageLoad();
+
+        selenium.waitForFrameToLoad("content", "30000");
+
         captureScreenshot();
     }
 
@@ -91,9 +108,13 @@ public class OrangeScrape {
 
         Select s = new Select(driver.findElement(new By.ByXPath("//select")));
         s.selectByVisibleText("Download RFMDB dump");
-        waitForPageLoad();
+
+        selenium.waitForFrameToLoad("content", "30000");
+
         driver.findElement(new By.ByXPath("//input[@value='Download RFMDB data']")).click();
-        waitForPageLoad();
+
+        selenium.waitForFrameToLoad("content", "30000");
+
         captureScreenshot();
     }
 
@@ -105,7 +126,7 @@ public class OrangeScrape {
     private void gotoImportAdmin() {
         System.out.println("Going to RFMDB Import-module");
         driver.findElement(new By.ByLinkText("RFMDB Import")).click();
-        waitForPageLoad();
+        selenium.waitForFrameToLoad("content", "30000");
     }
 
 
@@ -125,14 +146,14 @@ public class OrangeScrape {
 
         System.out.println("Opening: " + loginLink);
         driver.navigate().to(loginLink);
-        waitForPageLoad();
 
-        driver.findElement(new By.ById("username")).sendKeys(user);
+        waitForElementFound(new By.ById("username")).sendKeys(user);
 
         driver.findElement(new By.ById("password")).sendKeys(passwd);
 
         driver.findElement(new By.ByName("loginform")).submit();
-        waitForPageLoad();
+
+        selenium.waitForPageToLoad("30000");
 
         captureScreenshot();
     }
